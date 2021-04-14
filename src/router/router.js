@@ -44,13 +44,12 @@ export const appRouter = [
       title:"首页",
     children:[
       {
-        path: "",
+        path: "/",
         name:"index",
-        title:"直播间",
+        title:"首页",
         component: () => import("@/views/home/roomList.vue")
       }
     ],
-    
   },
 
   {
@@ -66,7 +65,71 @@ export const appRouter = [
         component: () => import("@/views/live/room.vue")
       }
     ]
-  }
+  },
+
+    {
+        path: '/analysis',
+        name:"analysis",
+        component:Main,
+        title:"数据分析",
+        children:[
+            {
+                path: "/",
+                name:"analysis",
+                title:"数据分析",
+                component: () => import("@/views/temp/temp.vue")
+            }
+        ],
+    },
+    {
+        path: '/live',
+        name:"live",
+        component:Main,
+        title:"课程直播",
+        children:[
+            {
+                path: "/",
+                name:"live",
+                title:"课程直播",
+                component: () => import("@/views/temp/temp.vue")
+            }
+        ],
+    },
+    {
+        path: '/sort',
+        name:"sort",
+        component:Main,
+        title:"直播分类",
+        children:[
+            {
+                path: "/",
+                name:"sort",
+                title:"直播分类",
+                component: () => import("@/views/temp/temp.vue")
+            }
+        ],
+    },
+    {
+        path: '/manager',
+        name:"manager",
+        component:Main,
+        title:"直播管理",
+        children:[
+            {
+                path: "/add",
+                name:"manager_add",
+                title:"创建直播间",
+                component: () => import("@/views/temp/temp.vue")
+            },
+            {
+                path: "/",
+                name:"manager_aa",
+                title:"直播管理",
+                component: () => import("@/views/temp/temp.vue")
+            },
+        ],
+    },
+
 ]
 
 

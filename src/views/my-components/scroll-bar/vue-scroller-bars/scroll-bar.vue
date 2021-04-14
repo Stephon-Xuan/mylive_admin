@@ -18,9 +18,7 @@
 </template>
 
 <script>
-/**
- * @author Lison<zhigang.li@tendcloud.com>
- */
+
 export default {
     name: 'scrollBar',
     props: {

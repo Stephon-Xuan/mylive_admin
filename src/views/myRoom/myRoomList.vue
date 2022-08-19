@@ -1,56 +1,117 @@
 
 <template>
-    <div class="home">
-         <!-- <Input v-model="power" placeholder="请输入权限访问密码" style="width: 300px" /> -->
-
+<div>
+    <Card>
+        <div>
+            <span>当前专栏：</span>
+            <div style="display:inline-block;width:300px;">
+                <Cascader v-model="channelType" :data="channelList" filterable></Cascader>
+            </div>
+        </div>
+        <div class="home">
         <div class="room-list">
-            <div class="room-box" v-for="(item,index) in roomList" :key="'room-'+index"  @click="goLivingRoom(item.id)">
+            <div class="room-box" v-for="(item,index) in userRoomList" :key="'room-'+index"  @click="goLivingRoom(item.room_id)">
                 <div class="room-box-img">
                     <img :src="item.image"/>
-                    <div class="room-box-img-type">
-                        {{item.type_name}}
-                       
-                    </div>
+                    <div class="room-box-img-type">{{item.type_name}}</div>
                 </div>
                 <div class="room-box-title">{{item.title}}</div>
-                 <p class="fee">{{item.integral_fee ? '￥'+ item.integral_fee : '免费'}}</p>
+                <p class="fee">{{item.integral_fee ? '￥'+ item.integral_fee : '免费'}}</p>
+
                 <!-- <div class="live-line"></div> -->
                 <div class="room-box-user">
                     <img :src="item.avatar"/>
                     <div class="room-box-user-name">{{item.name}}</div>
-                    
                 </div>
-                
             </div>
+            
+            
         </div>
-        <!-- <div v-else class="no_power">暂无访问权限</div> -->
     </div>
+    </Card>
+    <!-- <div class="page">
+        <Page :total="100" show-elevator></Page>
+    </div> -->
+</div>
+    
 </template>
 <script>
 import {mapActions,mapMutations,mapGetters,mapState} from "vuex"
 export default {
     name:"roomList",
     data(){
-        return {}
+        return {
+            channelList:[],
+            user_id:'',
+            channelType:[],
+            userRoomList:[]
+        }
     },
     computed:{
-        ...mapState({
-            roomList:state=>state.room.roomList
-        }),
-        // hasPower(){
-        //     const user_id = localStorage.getItem('user_id')
-        //     return 
+        // ...mapState({
+        //     roomList:state=>state.room.roomList
+        // }),
+        // userRoomList(){
+        //     const  user_id = localStorage.getItem('user_id')
+        //     const result =this.roomList.filter(item => {
+        //         return item.user_id === user_id
+        //     })
+        //     return result
         // }
     },
     mounted(){
-        //this.getRoomList()
-
-        this.searchType()
+        this.user_id = localStorage.getItem('user_id')
+            if(!this.user_id){
+                this.$Message.error({
+                    background: false,
+                    content: '请登录!'
+            });
+            return
+        }
+        this.getChannelList()
+        this.getRoomList()
+        // this.searchType()
+        console.log("直播列表",this.roomList)
+    },
+    watch:{
+        channelType(){
+            this.getRoomList()
+        }
     },
     methods:{
-        ...mapActions([
-            "setRoomList"
-        ]),
+        // ...mapActions([
+        //     "setRoomList"
+        // ]),
+        getRoomList(){
+            const params = {
+                user_id:this.user_id,
+                channel_type:this.channelType.length > 0 ? this.channelType[0
+                ] :undefined
+            }
+            this.$api.livingRoomApi.getRoomList(params).then(data=>{
+                console.log("获取列表成功",data)
+                this.userRoomList = data
+            }).catch(e=>{
+                this.$Message.warning("获取列表失败")
+            })
+        },
+
+
+        getChannelList(){
+            this.$api.channelApi.getChannelList(this.user_id).then(data=>{
+                this.channelList.push({value:'',label:'全部专栏'})
+                data.map(item =>{
+                     this.channelList.push({
+                        label:item.channel_name,
+                        value:item.channel_id
+                    })
+                })
+                
+                console.log("专栏数据",data)
+            }).catch(e=>{
+                console.log("请求错误",e)
+            })
+        },
 
         /**
          * @description: 跳转到直播间
@@ -71,14 +132,14 @@ export default {
          * @param {type} 
          * @return {type} 
          */
-        async searchType(data){
-            let params = {}
-            if(data){
-                params.type = data
-            }
-            this.setRoomList(params)
+        // async searchType(data){
+        //     let params = {}
+        //     if(data){
+        //         params.type = data
+        //     }
+        //     this.setRoomList(params)
             
-        }
+        // }
     },
 }
 </script>
@@ -181,10 +242,10 @@ export default {
         }
     }
 }
-.no_power{
+.page{
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 .fee{
     color: salmon;

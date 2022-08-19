@@ -19,6 +19,7 @@ class User{
      */
     userLogin(params){
         return axios.post(`${baseEnv.webUrl}/users/login`,params).then(res=>{
+            // return res.data
             return res.data
         })
     }
@@ -44,7 +45,19 @@ class User{
      * @return {type} 
      */
     addUser(params){
+        console.log("新增用户参数",params)
         return axios.post(`${baseEnv.webUrl}/users/addUser`,params).then(res=>{
+            return res.data
+        })
+    }
+
+    /**
+     * 编辑用户信息
+     * 
+     */
+    editUserInfo(params){
+        console.log("编辑用户参数",params)
+        return axios.post(`${baseEnv.webUrl}/users/editUser`,params).then(res=>{
             return res.data
         })
     }

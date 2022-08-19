@@ -1,12 +1,3 @@
-/*
- * @description: 
- * @author: Stephon
- * @github: https://github.com/lyff1006
- * @lastEditors: Stephon
- * @Date: 2020-09-01 20:20:07
- * @LastEditTime: 2020-09-19 01:20:37
- * @Copyright: 1.0.0
- */
 const env = process.env
 const baseUrl = env.NODE_ENV==="development"?"http://localhost":"https://www.example.com"
 const baseEnv = {
@@ -14,7 +5,7 @@ const baseEnv = {
     mode:env.VUE_APP_CURRENTMODE,//当前模式
     webUrl : env.VUE_APP_CURRENTMODE==="electron"?`${baseUrl}:8512`:"/webserve",
     socketUrl : {
-        //barrage:`${baseUrl}:8511/barrage`,
+        // barrage:`${baseUrl}:8511/barrage`,
         barrage:env.NODE_ENV==="development"?`${baseUrl}:8511/barrage`:`${baseUrl}/barrage`,
     },
     //livingUrl : env.NODE_ENV==="development"?`${baseUrl}:8000/live`:`${baseUrl}/live/live`

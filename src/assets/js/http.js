@@ -1,14 +1,10 @@
 /*
  * @description: 
- * @author: Stephon
- * @lastEditors: Stephon
- * @Date: 2020-08-31 15:49:05
- * @LastEditTime: 2020-09-05 16:38:24
- * @Copyright: 1.0.0
  */
 import axios from 'axios'; // 引入axios
 import Qs from 'qs'; // 引入qs模块，用来序列化post类型的数据
 let myAxios = axios.create({})
+
 myAxios.defaults.headers.post['Content-Type'] = 'application/json';
 
 // http request 拦截器

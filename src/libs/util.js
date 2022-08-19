@@ -48,9 +48,7 @@ util.handleTitle = function (vm, item) {
 util.setCurrentPath = function (vm, name) {
   let title = '';
   let isOtherRouter = false;
-  console.log("菜单路由",vm.$store.state.menus.routers)
   vm.$store.state.menus.routers.forEach(item => {
-    console.log("选项",item)
       if (item.children && item.children.length === 1) {
           if (item.children[0].name === name) {
               title = util.handleTitle(vm, item);

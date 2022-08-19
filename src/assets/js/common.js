@@ -8,6 +8,34 @@
  */
 
 class Common{
+     copy(text) {
+        const input = document.createElement('input')
+        input.setAttribute('value', text)
+        document.body.appendChild(input)
+        //选中文本
+        input.select()
+        //判断是否支持copy
+        if (document.execCommand('copy')) {
+            document.execCommand('copy')
+        } else {
+            return false
+        }
+        document.body.removeChild(input)
+        return true
+    }
+
+    //获取路径参数
+    getQueryVariable(variable) {
+        let query = window.location.search.substring(1)
+        let vars = query.split('&')
+        for (let i = 0; i < vars.length; i++) {
+        let pair = vars[i].split('=')
+        if (pair[0] == variable) {
+            return pair[1]
+        }
+        }
+        return false
+    }
     //生成len位随机字符串
     getCode(len){
         var chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];

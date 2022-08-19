@@ -3,7 +3,8 @@
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
-        <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
+        <div class="sidebar-menu-con" :style="{width: shrink?'0px':'200px', overflow: shrink ? 'visible' : 'auto'}">
+
             <scroll-bar ref="scrollBar">
                  <!-- :theme="menuTheme"  -->
                 <shrinkable-menu
@@ -23,7 +24,9 @@
             <div class="main-header">
                 <div class="navicon-con">
                     <Button :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)'}" type="text" @click="toggleClick">
-                        <Icon type="navicon" size="32"></Icon>
+<!--                        <Icon type="navicon" size="32"></Icon>-->
+<!--                        <Icon type="ios-keypad" size="32"/>-->
+                        <Icon type="md-menu" size="32"/>
                     </Button>
                 </div>
                 <div class="header-middle-con">
@@ -32,26 +35,30 @@
                     </div>
                 </div>
                 <div class="header-avator-con">
-                    <!-- <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
+<!--                    <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>-->
+                    <!--
                     <lock-screen></lock-screen>
                     <message-tip v-model="mesCount"></message-tip>
                     <theme-switch></theme-switch> -->
-                    
-                    <div class="user-dropdown-menu-con">
-                        <!-- <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
-                            <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
-                                <a href="javascript:void(0)">
-                                    <span class="main-user-name">{{ userName }}</span>
-                                    <Icon type="arrow-down-b"></Icon>
-                                </a>
-                                <DropdownMenu slot="list">
-                                    <DropdownItem name="ownSpace">个人中心</DropdownItem>
-                                    <DropdownItem name="loginout" divided>退出登录</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                            <Avatar :src="avatorPath" style="background: #619fe7;margin-left: 10px;"></Avatar>
-                        </Row> -->
-                    </div>
+
+<!--                    <div class="user-dropdown-menu-con">-->
+<!--                        <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">-->
+<!--                            <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">-->
+<!--                                <a href="javascript:void(0)">-->
+<!--                                    <span class="main-user-name">{{ userName }}</span>-->
+<!--                                    <Icon type="arrow-down-b"></Icon>-->
+<!--                                </a>-->
+<!--                                <DropdownMenu slot="list">-->
+<!--                                    <DropdownItem name="ownSpace">个人中心</DropdownItem>-->
+<!--                                    <DropdownItem name="loginout" divided>退出登录</DropdownItem>-->
+<!--                                </DropdownMenu>-->
+<!--                            </Dropdown>-->
+<!--                            <Avatar :src="avatorPath"  style="background: #619fe7;margin-left: 10px;"></Avatar>-->
+<!--                        </Row>-->
+<!--                    </div>-->
+                    <Header></Header>
+
+
                 </div>
             </div>
             <!-- <div class="tags-con">
@@ -68,27 +75,28 @@
     </div>
 </template>
 <script>
-    import shrinkableMenu from './main-components/shrinkable-menu/shrinkable-menu.vue';
+    import shrinkableMenu from '@/components/main-components/shrinkable-menu/shrinkable-menu.vue';
     // import tagsPageOpened from './main-components/tags-page-opened.vue';
-    import breadcrumbNav from './main-components/breadcrumb-nav.vue';
-    // import fullScreen from './main-components/fullscreen.vue';
+    import breadcrumbNav from '@/components//main-components/breadcrumb-nav.vue';
+    import fullScreen from '@/components//main-components/fullscreen.vue';
     // import lockScreen from './main-components/lockscreen/lockscreen.vue';
     // import messageTip from './main-components/message-tip.vue';
     // import themeSwitch from './main-components/theme-switch/theme-switch.vue';
     // import Cookies from 'js-cookie';
     import util from '@/libs/util.js';
-    import scrollBar from '@/views/my-components/scroll-bar/vue-scroller-bars';
-    
+    import scrollBar from '@/components/my-components/scroll-bar/vue-scroller-bars';
+    import Header from "@/components/Header";//旧版的头部
     export default {
         components: {
             shrinkableMenu,
             // tagsPageOpened,
             breadcrumbNav,
-            // fullScreen,
+            fullScreen,
             // lockScreen,
             // messageTip,
             // themeSwitch,
-            scrollBar
+            scrollBar,
+            Header
         },
         data () {
             return {
@@ -101,7 +109,6 @@
         computed: {
             menuList () {
                 const menuList = this.$store.state.menus.menuList
-                console.log("菜单",menuList)
                 return menuList;
             },
             pageTagsList () {
@@ -110,18 +117,19 @@
             currentPath () {
                 return this.$store.state.menus.currentPath; // 当前面包屑数组
             },
-        //     avatorPath () {
-        //         return localStorage.avatorImgPath;
-        //     },
+            avatorPath () {
+                // return localStorage.avatorImgPath;
+                return 'http://p1.music.126.net/HHld8HW1sje1MP6PuzFWZg==/109951164045790653.jpg?param=180y180'
+            },
             cachePage () {
                 return this.$store.state.menus.cachePage;
             },
         //     lang () {
         //         return this.$store.state.app.lang;
         //     },
-        //     menuTheme () {
-        //         return this.$store.state.app.menuTheme;
-        //     },
+            menuTheme () {
+                return this.$store.state.menus.menuTheme;
+            },
         //     mesCount () {
         //         return this.$store.state.app.messageCount;
         //     }
@@ -143,19 +151,19 @@
                 this.shrink = !this.shrink;
             },
             handleClickUserDropdown (name) {
-                if (name === 'ownSpace') {
-                    util.openNewPage(this, 'ownspace_index');
-                    this.$router.push({
-                        name: 'ownspace_index'
-                    });
-                } else if (name === 'loginout') {
+                // if (name === 'ownSpace') {
+                //     util.openNewPage(this, 'ownspace_index');
+                //     this.$router.push({
+                //         name: 'ownspace_index'
+                //     });
+                // } else if (name === 'loginout') {
                     // 退出登录
                     this.$store.commit('logout', this);
                     this.$store.commit('clearOpenedSubmenu');
                     this.$router.push({
                         name: 'login'
                     });
-                }
+                // }
             },
             checkTag (name) {
                 let openpageHasTag = this.pageTagsList.some(item => {
@@ -178,9 +186,9 @@
                 }
                 return true;
             },
-        //     fullscreenChange (isFullScreen) {
-        //         // console.log(isFullScreen);
-        //     },
+            fullscreenChange (isFullScreen) {
+                console.log(isFullScreen);
+            },
             scrollBarResize () {
                 this.$refs.scrollBar.resize();
             }
@@ -206,14 +214,14 @@
         },
         mounted () {
             this.init();
-            // window.addEventListener('resize', this.scrollBarResize);
+            window.addEventListener('resize', this.scrollBarResize);
         },
         // created () {
         //     // 显示打开的页面的列表
         //     this.$store.commit('setOpenedList');
         // },
-        // dispatch () {
-        //     window.removeEventListener('resize', this.scrollBarResize);
-        // }
+        dispatch () {
+            window.removeEventListener('resize', this.scrollBarResize);
+        }
     };
 </script>

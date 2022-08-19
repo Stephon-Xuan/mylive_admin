@@ -6,7 +6,7 @@
           <img :src="roomDetail.avatar" />
         </div>
         <div>
-          <div class="video-content-header-title">{{roomDetail.title}}</div>
+          <div class="video-content-header-title">{{roomDetail && roomDetail.title ? roomDetail.title : ''}}</div>
           <div class="video-content-header-anchor">{{roomDetail.name}}</div>
         </div>
       </div>
@@ -45,15 +45,23 @@ export default {
   },
   created() {},
   async mounted() {
-    let urlData = this.$router.history.current.query;
-    this.livingRoom = urlData.room;
+    // let urlData = this.$router.history.current.query;
+
+    // this.livingRoom = urlData.room;
+    this.livingRoom = common.getQueryVariable('room')
     this.roomDetail = await this.$api.livingRoomApi.getRoomDetail({id:this.livingRoom})
+      console.log("直播间详情",this.roomDetail,this.roomDetail.live_url)
+      // console.log("是否进来了",this.roomDetail && this.roomDetail.live_url !== '')
     this.$nextTick(() => {
       if (flvjs.isSupported()) {
         var videoElement = document.getElementById("videoElement");
         this.flvPlayer = flvjs.createPlayer({
           type: "flv",
-          url: `${this.$baseEnv.livingUrl}/${this.livingRoom}.flv`,
+          url: (this.roomDetail && this.roomDetail.live_url !== '') ?
+              this.roomDetail.live_url : `${this.$baseEnv.livingUrl}/${this.livingRoom}.flv`
+          //   url:'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8'
+          //   url:'http://qkqxzb.qingk.cn/live/bjtvjj.flv'
+          //   url:'https://sjy-cdn.xuetangx.com/8f0cf2841995c95e-10.mp4'
         });
         this.flvPlayer.attachMediaElement(videoElement);
         try {
@@ -77,8 +85,8 @@ export default {
   height: 44vw;
   .video-content {
     box-sizing: border-box;
-    height: 100%;
-    width: calc(100vw - 360px - 40px);
+    height: 80%;
+    width: calc(100vw - 360px - 300px);
     min-width: 300px;
     padding: 20px;
     background: #fff;
@@ -114,7 +122,7 @@ export default {
       position: absolute;
       height: 40px;
       //border-bottom: #fff 1px solid;
-      width: calc(100% - 40px);
+      width: calc(100% - 80px);
       color: #fff;
       &-item {
         position: absolute;
@@ -128,7 +136,7 @@ export default {
   }
   .chat-content {
     width: 360px;
-    height: 100%;
+    height: 80%;
     background: #fff;
     margin-right: 20px;
     box-sizing: border-box;

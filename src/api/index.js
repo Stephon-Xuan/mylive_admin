@@ -1,17 +1,24 @@
 /*
  * @description: 
  * @author: Stephon
- * @github: https://github.com/lyff1006
  * @lastEditors: Stephon
- * @Date: 2020-09-17 23:45:35
- * @LastEditTime: 2020-09-18 00:06:12
  * @Copyright: 1.0.0
  */
 import livingRoomApi from "./modules/livingRoom"
 import userApi from "./modules/user"
+import channelApi from "./modules/channel"
+import uploadApi from "./modules/upload"
+import analysisApi from "./modules/analysis"
+import examineApi from "./modules/examine"
+import traineesApi from "./modules/trainees"
 
 const apiObj = {
     livingRoomApi,
-    userApi
+    userApi,
+    channelApi,
+    uploadApi,
+    analysisApi,
+    examineApi,
+    traineesApi
 }
 export default apiObj

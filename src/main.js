@@ -1,12 +1,3 @@
-/*
- * @description: 
- * @author: Stephon
- * @github: https://github.com/lyff1006
- * @lastEditors: Stephon
- * @Date: 2020-09-12 10:45:54
- * @LastEditTime: 2020-11-22 23:50:43
- * @Copyright: 1.0.0
- */
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -40,4 +31,13 @@ new Vue({
   router,
   store,
   render: h => h(App),
-}).$mount('#app')
+  mounted () {
+    this.currentPageName = this.$route.name;
+    // 显示打开的页面的列表
+    this.$store.commit('setOpenedList');
+    this.$store.commit('initCachepage');
+    // 权限菜单过滤相关
+    this.$store.commit('updateMenulist');
+    // iview-admin检查更新
+  },
+}).$mount('#app') 

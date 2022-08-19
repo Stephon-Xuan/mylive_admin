@@ -25,11 +25,12 @@ export default {
         return {
             battageMsg:"",
             livingRoom:"",
+            barrageMsgList:[]
         }
     },
     computed:{
         ...mapState({
-            barrageMsgList:state=>state.barrage.barrageMsgList,
+            // barrageMsgList:state=>state.barrage.barrageMsgList,
             currentUser:state=>state.user.currentUser,
         })
     },
@@ -38,16 +39,21 @@ export default {
         console.log( this.livingRoom)
         this.joinLiveRoom(this.livingRoom)
         this.$socketBarrage.on("chatLiveRoom",res=>{
-            this.pushbarrageMsgList(res)
+            // this.pushbarrageMsgList(res)
+            this.barrageMsgList.push(res)
+            // console.log("res的值",res)
             this.$nextTick(()=>{
                 this.$refs.barrageList.scrollTop=this.$refs.barrageList.clientHeight
             })
         })
     },
+    destroyed(){
+        this.leaveLiveRoom(this.livingRoom)
+    },
     methods:{
-        ...mapMutations([
-            "pushbarrageMsgList"
-        ]),
+        // ...mapMutations([
+        //     "pushbarrageMsgList"
+        // ]),
 
         
         //加入直播间
@@ -57,7 +63,9 @@ export default {
 
         
         //离开直播间
-        leaveLiveRoom(){},
+        leaveLiveRoom(name){
+            this.$sockBarrage.leaveRoom(name)
+        },
 
 
         //发送弹幕

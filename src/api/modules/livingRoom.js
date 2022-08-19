@@ -18,7 +18,7 @@ class LivingRoom{
      * @return {type} 
      */
     getRoomList(params){
-        if(params&&params.type){
+        if(params && params.type || (params && (params.user_id || params.channel_type)) ){
             //通过类型进行搜索
             return axios.get(`${baseEnv.webUrl}/livingRoom/roomListByType`,{params:params}).then(res=>{
                 return res.data.data
@@ -30,6 +30,7 @@ class LivingRoom{
             })
         }
     }
+
 
     /**
      * @description: 获取直播间详情
@@ -52,7 +53,7 @@ class LivingRoom{
      * @return {type} 
      */
     addRoom(params){
-        return axios.get(`${baseEnv.webUrl}/livingRoom/addRoom`,params).then(res=>{
+        return axios.post(`${baseEnv.webUrl}/livingRoom/addRoom`,params).then(res=>{
             return res.data
         })
     }
@@ -67,6 +68,18 @@ class LivingRoom{
     editRoom(params){
         return axios.post(`${baseEnv.webUrl}/livingRoom/editRoom`,params).then(res=>{
             return res.data
+        })
+    }
+
+    //删除直播间
+    deleteRoom(params){
+        return axios.get(`${baseEnv.webUrl}/livingRoom/deleteRoom`,{params}).then(res=>{
+            return res.data.data
+        })
+    }
+    getRoomType(){
+         return axios.get(`${baseEnv.webUrl}/livingRoom/roomTypeList`).then(res=>{
+            return res.data.data
         })
     }
 }
